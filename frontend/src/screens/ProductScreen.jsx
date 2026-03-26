@@ -1,15 +1,18 @@
-import { Link, useParams } from "react-router-dom"
+import { Link, useParams, useNavigate  } from "react-router-dom"
 import { Row, Col, Image, ListGroup, Button, Card } from "react-bootstrap"
 import Rating from "../components/Rating"
 import { useGetProductDetailsQuery } from "../slices/productsApiSlice"
 import Loader from "../components/Loader"
 import Message from "../components/Message"
+import { useState } from "react"
 
 const ProductScreen = () => {
 
     const { id: productId } = useParams()
+    const [ qty, setQty ] = useState(1)
 
     const { data: product, isLoading, error } = useGetProductDetailsQuery(productId)
+
     
   return (
     <>
@@ -52,6 +55,15 @@ const ProductScreen = () => {
                                         </Col>
                                     </Row>
                                 </ListGroup.Item>
+
+                                { product.countInStock > 0 && (
+                                    <ListGroup.Item>
+                                        <Row>
+                                            <Col>Qty</Col>
+                                        </Row>
+                                    </ListGroup.Item>
+                                ) } 
+
                                 <ListGroup.Item>
                                     <Button className="btn-block" type="button" disabled={product.countInStock === 0}>
                                         Add to Cart
