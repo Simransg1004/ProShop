@@ -1,4 +1,4 @@
-import { Row, Col, Spinner } from "react-bootstrap"
+import { Row, Col } from "react-bootstrap"
 import Products from "../components/Products"
 import { useGetProductsQuery } from "../slices/productsApiSlice"
 import Loader from "../components/Loader"
