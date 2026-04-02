@@ -16,14 +16,14 @@ const authUser = asyncHandler( async(req, res) => {
     const { email, password } = req.body
 
     const user = await User.findOne({email})
-    console.log(user)
 
     if( user && (await user.matchPassword(password)) ) {
         generateToken(res, user._id)
         res.json({
             _id: user._id,
             name: user.name,
-            email: user.email
+            email: user.email,
+            isAdmin: user.isAdmin
         })
     } else {
         res.status(401)
@@ -36,7 +36,7 @@ const authUser = asyncHandler( async(req, res) => {
 // @route       POST /api/users
 // @access      Public
 const registerUser = asyncHandler( async(req, res) => {
-    const { name, email, password } = req.body;
+    const { name, email, password} = req.body;
     
     const userExists = await User.findOne({email}) 
 
@@ -70,7 +70,13 @@ const registerUser = asyncHandler( async(req, res) => {
 // @route       POST /api/users/logout
 // @access      Private
 const logoutUser = asyncHandler( async(req, res) => {
-    res.clearCookie("jwt")
+    // res.clearCookie("jwt")
+
+    res.cookie('jwt', '', {
+        httpOnly: true,
+        expires: new Date(0) 
+    })
+
     res.status(200).json({
         msg: "Logged out successfully"
     })
@@ -80,42 +86,42 @@ const logoutUser = asyncHandler( async(req, res) => {
 // @route       GET /api/users/profile
 // @access      Private
 const getUserProfile = asyncHandler( async(req, res) => {
-    // res.json({msg : "ROute"})
+    res.json({msg : "Get user profile Protected"})
 })
 
 // @desc        Update user profile
 // @route       POST /api/users/profile
 // @access      Private
 const updateUserProfile = asyncHandler( async(req, res) => {
-    // res.json({msg : "ROute"})
+    res.json({msg : "Protected UUP"})
 })
 
 // @desc        Get all users 
 // @route       GET /api/users
 // @access      Private/Admin
 const getUsers = asyncHandler( async(req, res) => {
-    // res.json({msg : "ROute"})
+    res.json({msg : "All Users"})
 })
 
 // @desc        Delete user
 // @route       DELETE /api/users/:id
 // @access      Private/Admin
 const deleteUser = asyncHandler( async(req, res) => {
-    // res.json({msg : "ROute"})
+    res.json({msg : "dlete user"})
 })
 
 // @desc        Get user by ID
 // @route       GET /api/users/:id
 // @access      Private/Admin
 const getUserById = asyncHandler( async(req, res) => {
-    // res.json({msg : "ROute"})
+    res.json({msg : "getUserById ROute"})
 })
 
 // @desc        Update user
 // @route       PUT /api/users/:id
 // @access      Private/Admin
 const updateUser = asyncHandler( async(req, res) => {
-    // res.json({msg : "ROute"})
+    res.json({msg : "updateUser"})
 })
 
 export {
