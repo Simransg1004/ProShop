@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from "react-redux"
 import { Row, Col, ListGroup, Image, Form, Button, Card } from "react-bootstrap"
 import Message from '../components/Message'
@@ -11,18 +11,19 @@ const CartScreen = () => {
   const { cartItems } = cart
 
   const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   const addToCartHandler = (product, qty) => {
     dispatch(addToCart({...product, qty}))
   }
 
-  const checkoutHandler = () => {
-    console.log("checkout")
-  }
-
   const removeFromCartHandler = (id) => {
     console.log(id)
     dispatch(removeFromCart({id}))
+  }
+  
+  const checkoutHandler = () => {
+    navigate("/login?redirect=/shipping")
   }
 
   return (
@@ -78,7 +79,9 @@ const CartScreen = () => {
               }
             </ListGroup.Item>
             <ListGroup.Item>
-              <Button type='button' className='btn-block' disabled={cartItems.length === 0} onClick={checkoutHandler} >
+              <Button type='button' className='btn-block'
+               disabled={cartItems.length === 0}
+               onClick={checkoutHandler} >
                 Proceed To Checkout
               </Button>
             </ListGroup.Item>

@@ -14,6 +14,9 @@ import generateToken from "../utils/generateToken.js"
 // @access     Public
 const authUser = asyncHandler( async(req, res) => {
     const { email, password } = req.body
+     if(!email || !password) {
+        throw new Error("Please enter all the fields");
+    }
 
     const user = await User.findOne({email})
 
@@ -36,7 +39,11 @@ const authUser = asyncHandler( async(req, res) => {
 // @route       POST /api/users
 // @access      Public
 const registerUser = asyncHandler( async(req, res) => {
+    
     const { name, email, password } = req.body;
+    if(!name || !email || !password) {
+        throw new Error("Please enter all the fields");
+    }
     
     const userExists = await User.findOne({email}) 
 

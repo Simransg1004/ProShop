@@ -1,5 +1,5 @@
 import { Button, Form, Row, Col } from "react-bootstrap"
-import { Link, useNavigate } from "react-router-dom"
+import { Link, useLocation, useNavigate } from "react-router-dom"
 import FormContainer from "../components/FormContainer"
 import { useEffect, useState } from "react"
 import { useSelector, useDispatch } from "react-redux"
@@ -12,7 +12,6 @@ const LoginScreen = () => {
 
     const [ email, setEmail ] = useState("")
     const [ password, setPassword ] = useState("")
-    const redirect = ""
 
     const dispatch = useDispatch()
     const navigate = useNavigate()
@@ -21,18 +20,22 @@ const LoginScreen = () => {
 
     const { userInfo } = useSelector((state) => state.auth)
 
+    const { search } = useLocation();
+    const sp = new URLSearchParams(search);
+    const redirect = sp.get("redirect") || "/"
+
     useEffect(() => {
         if(userInfo) {
-            navigate("/")
+            navigate(redirect)
         }
-    }, [navigate, userInfo])
+    }, [navigate, redirect, userInfo])
 
     const submitHandler = async(e) => {
         e.preventDefault()
         try {
             const res = await login({email, password}).unwrap()
             dispatch(setCredentials({...res}))
-            navigate("/")
+            navigate(redirect)
         } catch(err) {
             toast.error(err?.data?.message || err.error)
         }
@@ -64,7 +67,7 @@ const LoginScreen = () => {
 
             { isLoading && <Loader/> }
 
-            <Button type="submit" disabled={isLoading} >
+            <Button type="submit" disabled={isLoading} className="my-2">
                 Sign in
             </Button>
 
@@ -72,7 +75,7 @@ const LoginScreen = () => {
 
         <Row>
             <Col>
-                New Customer? <Link to={ redirect ? `/register?redirect=${redirect}` : "/register" }>
+                New Customer? <Link to={ redirect ? `/register?redirect=${redirect}` : "/register"} >
                     Register
                 </Link>
             </Col>
